@@ -54,7 +54,7 @@ const FAUCET_KEY = {
   email: "gvsxvust.ufmniviq@tezos.example.org",
 };
 
-export let prepare = async (publicKey: string, input: Tx[]) /*: Promise<ForgeParams>*/ => {
+export let prepare = async (publicKey: string, input: Tx[]): Promise<ForgeParams> => {
   Tezos.setProvider({
     rpc: "https://api.tez.ie/rpc/carthagenet",
     // signer: new NoSecretsSigner(publicKey),
@@ -69,30 +69,30 @@ export let prepare = async (publicKey: string, input: Tx[]) /*: Promise<ForgePar
 
   // we need the public key and pkh of sender
   // we need to inject a custom signer
-  // let pkh = await Tezos.signer.publicKeyHash();
+  let pkh = await Tezos.signer.publicKeyHash();
   // // //Get counter for source address
-  // let { counter } = await Tezos.rpc.getContract(pkh);
+  let { counter } = await Tezos.rpc.getContract(pkh);
 
-  // if (!counter) {
-  //   throw new Error(`Got undefined counter for source address ${pkh}`);
-  // }
+  if (!counter) {
+    throw new Error(`Got undefined counter for source address ${pkh}`);
+  }
 
   // Get latest block hash (aka branch id)
-  // let hash = (await Tezos.rpc.getBlockHeader()).hash;
-  // let count = Number.parseInt(counter, 10);
-  // let transactions: OperationContentsTransaction[] = [];
+  let hash = (await Tezos.rpc.getBlockHeader()).hash;
+  let count = Number.parseInt(counter, 10);
+  let transactions: OperationContentsTransaction[] = [];
 
-  const est = await Tezos.estimate.transfer({
-    to: "tz1RmA3JrfrSW8yRJWikSzdCz7Aczx4yiAf6",
-    amount: 0.5,
-  });
-  console.log(`burnFeeMutez : ${est.burnFeeMutez}, 
-    gasLimit : ${est.gasLimit}, 
-    minimalFeeMutez : ${est.minimalFeeMutez}, 
-    storageLimit : ${est.storageLimit}, 
-    suggestedFeeMutez : ${est.suggestedFeeMutez}, 
-    totalCost : ${est.totalCost}, 
-    usingBaseFeeMutez : ${est.usingBaseFeeMutez}`);
+  //   const est = await Tezos.estimate.transfer({
+  //     to: input[0].dst,
+  //     amount: input[0].amount,
+  //   });
+  //   console.log(`burnFeeMutez : ${est.burnFeeMutez},
+  //     gasLimit : ${est.gasLimit},
+  //     minimalFeeMutez : ${est.minimalFeeMutez},
+  //     storageLimit : ${est.storageLimit},
+  //     suggestedFeeMutez : ${est.suggestedFeeMutez},
+  //     totalCost : ${est.totalCost},
+  //     usingBaseFeeMutez : ${est.usingBaseFeeMutez}`);
   // .then((est) => {
   //   console.log(`burnFeeMutez : ${est.burnFeeMutez},
   // gasLimit : ${est.gasLimit},
@@ -104,25 +104,25 @@ export let prepare = async (publicKey: string, input: Tx[]) /*: Promise<ForgePar
   // })
   // .catch((error) => console.table(`Error: ${JSON.stringify(error, null, 2)}`));
 
-  // for (const tx of input) {
-  //   let est = await Tezos.estimate.transfer({ amount: tx.amount, to: tx.dst, source: pkh });
+  for (const tx of input) {
+    let est = await Tezos.estimate.transfer({ amount: tx.amount, to: tx.dst, source: pkh });
 
-  //   const result: OperationContentsTransaction = {
-  //     kind: OpKind.TRANSACTION,
-  //     source: pkh,
-  //     amount: tx.amount.toString(),
-  //     destination: tx.dst,
-  //     counter: (++count).toString(),
-  //     gas_limit: est.gasLimit.toString(),
-  //     fee: est.suggestedFeeMutez.toString(),
-  //     storage_limit: est.storageLimit.toString(),
-  //   };
-  //   transactions.push(result);
-  // }
+    const result: OperationContentsTransaction = {
+      kind: OpKind.TRANSACTION,
+      source: pkh,
+      amount: tx.amount.toString(),
+      destination: tx.dst,
+      counter: (++count).toString(),
+      gas_limit: est.gasLimit.toString(),
+      fee: est.suggestedFeeMutez.toString(),
+      storage_limit: est.storageLimit.toString(),
+    };
+    transactions.push(result);
+  }
 
-  // return {
-  //   branch: hash,
-  //   //TODO pending refactor of types
-  //   contents: transactions as any,
-  // };
+  return {
+    branch: hash,
+    //TODO pending refactor of types
+    contents: transactions as any,
+  };
 };

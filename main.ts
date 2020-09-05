@@ -32,10 +32,10 @@ program
     let input = JSON.parse(readFileSync(command.input).toString("utf-8"));
     try {
       let preppedTransactions = await prepare(command.source_key, input);
+      console.log(JSON.stringify(preppedTransactions, null, 2));
     } catch (e) {
       console.log("Error => ", e);
     }
-    // console.log(JSON.stringify(preppedTransactions, null, 2))
   });
 
 program
