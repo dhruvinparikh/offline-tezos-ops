@@ -13,6 +13,15 @@ export interface Tx {
   amount: number;
 }
 
+export interface Fk {
+  mnemonic: [string];
+  secret: string;
+  amount: number;
+  pkh: string;
+  password: string;
+  email: string
+}
+
 enum TX_TYPE {
   TEZOS,
   // TODO: implement asset contract support
@@ -25,17 +34,14 @@ program
   .description(
     "Takes a list of transactions and prepares them for signing. Requires a synced RPC node"
   )
-  // .option("-s, --source_key <key>", "The public key of the source address")
+  .option("-f, --faucet_key <key>", "The faucet key file for source")
   .option("-i, --input <file>", "Input JSON file containing transactions")
   .action(async (command) => {
     //TODO, get src from command line arg
+    let faucetKey = JSON.parse(readFileSync(command.faucet_key).toString("utf-8"));
     let input = JSON.parse(readFileSync(command.input).toString("utf-8"));
-    try {
-      let preppedTransactions = await prepare(command.source_key, input);
-      console.log(JSON.stringify(preppedTransactions, null, 2));
-    } catch (e) {
-      console.log("Error => ", e);
-    }
+    let preppedTransactions = await prepare(faucetKey, input);
+    console.log(JSON.stringify(preppedTransactions, null, 2));
   });
 
 program

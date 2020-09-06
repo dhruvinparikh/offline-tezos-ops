@@ -8,9 +8,8 @@ Let's assume we have two environments, an on-line environment that has access to
 
 Pre-requests for operation:
 
-* A JSON file containing the desired transactions. See `sample-input.json`
-* The public key (not the public key *hash*) of the sending wallet
-* The private key of the sending wallet (presumed to be located on the air-gapped system and handled securely)
+* A JSON file containing the desired transactions. See `sample-input.json`.
+* Download faucet key file from [https://faucet.tzalpha.net/](https://faucet.tzalpha.net/) and paste it to root of this directory.
 
 ## Step 1
 
@@ -18,7 +17,7 @@ Run the 'prepare' step.
 
 ```sh
 npm --silent start -- prepare \
-        -s edpkkohFDNUFETtUZ6kZwm5uHrRLA6GrqKoSkeZXg3B7pufSi1tGoZ \
+        -f ./tz1gMXpUmAGBnGgYuzzBjrBoL93EAJeYwjLm.json \
         -i ./sample-input.json > txs_for_secure_environment.json
 ```
 
