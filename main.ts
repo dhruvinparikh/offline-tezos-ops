@@ -64,6 +64,6 @@ program
   .description("Taking a signed operation, validate and inject the operation")
   .action(async (content, command) => {
     let opHash = await inject(content);
-    console.log(`https://babylon.tzkt.io/${opHash}`);
+    console.log(`https://carthagenet.tzstats.com/${opHash}`);
   });
 program.parse(process.argv);
