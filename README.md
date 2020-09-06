@@ -13,7 +13,7 @@ Pre-requests for operation:
 
 ## Step 1
 
-Run the 'prepare' step.
+Run the `prepare` step.
 
 ```sh
 npm --silent start -- prepare \
@@ -33,7 +33,7 @@ Run the `sign` step
 
 ```sh
 npm --silent start -- sign \
-        --signing_key edsk417kwqd67ze6DhCwtDR9PYnii5NKCmaXmgML89CvDiS1jV2EHU \
+        -f ./tz1gMXpUmAGBnGgYuzzBjrBoL93EAJeYwjLm.json \
         -i ./txs_for_secure_environment.json > signed_bytes.txt
 ```
 

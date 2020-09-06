@@ -19,7 +19,7 @@ export interface Fk {
   amount: number;
   pkh: string;
   password: string;
-  email: string
+  email: string;
 }
 
 enum TX_TYPE {
@@ -47,17 +47,15 @@ program
 program
   .command("sign")
   .description("Takes prepared transaction input, forges and signs an operation")
-  .option(
-    "--signing_key <key>",
-    "secret key to sign operations WARNING POC: Handle your keys securely!"
-  )
+  .option("-f, --faucet_key <key>", "The faucet key file for source")
   .option(
     "-i, --input <file>",
     "JSON file of prepared transactions as produced by the `prepare` stage"
   )
   .action(async (command) => {
+    let faucetKey = JSON.parse(readFileSync(command.faucet_key).toString("utf-8"));
     let preparedInput = JSON.parse(readFileSync(command.input).toString("utf-8"));
-    let signedOps = await forge(preparedInput, command.signing_key);
+    let signedOps = await forge(preparedInput, faucetKey);
     console.log(signedOps);
   });
 

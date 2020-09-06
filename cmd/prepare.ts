@@ -1,5 +1,5 @@
-import { Tx,Fk } from "../main";
-import { Tezos, ForgeParams, Signer } from "@taquito/taquito";
+import { Tx, Fk } from "../main";
+import { Tezos, ForgeParams } from "@taquito/taquito";
 import { OperationContentsTransaction, OpKind } from "@taquito/rpc";
 
 export let prepare = async (faucetKey: Fk, input: Tx[]): Promise<ForgeParams> => {
